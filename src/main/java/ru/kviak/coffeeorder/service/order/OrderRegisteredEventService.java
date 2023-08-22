@@ -8,10 +8,7 @@ import ru.kviak.coffeeorder.model.OrderEntity;
 import ru.kviak.coffeeorder.model.OrderStatus;
 import ru.kviak.coffeeorder.repository.EventRepository;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.UUID;
 
 
@@ -27,17 +24,16 @@ public class OrderRegisteredEventService implements OrderService<OrderRegistered
     }
 
     @Override
-    public OrderEntity publishEvent(OrderEventDto eventDto) {
-
+    public OrderEntity publishEvent(OrderEventDto OrderEvent) {
+        OrderRegisteredEventDto event = (OrderRegisteredEventDto) OrderEvent;
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(UUID.randomUUID());
-        orderEntity.setClientId(UUID.randomUUID());
-        orderEntity.setEmployeeId(UUID.randomUUID());
         orderEntity.setExpectedIssueTime(Instant.now());
-        orderEntity.setProductIds(Collections.singletonList(UUID.randomUUID()));
-        orderEntity.setPrice(BigDecimal.valueOf(200.00));
         orderEntity.setStatus(OrderStatus.REGISTERED);
-
+        orderEntity.setClientId(event.getClientId());
+        orderEntity.setProductIds(event.getProductIds());
+        orderEntity.setEmployeeId(event.getEmployeeId());
+        orderEntity.setPrice(event.getPrice());
 
         eventRepository.save(orderEntity);
         return orderEntity;

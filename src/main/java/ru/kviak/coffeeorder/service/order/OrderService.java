@@ -6,7 +6,7 @@ import ru.kviak.coffeeorder.model.OrderEntity;
 public interface OrderService<T extends OrderEventDto> {
 
     Class<T> getType();
-    OrderEntity publishEvent(T event);
+    OrderEntity publishEvent(OrderEventDto event);
 
     //Order findOrder(int id);
 }

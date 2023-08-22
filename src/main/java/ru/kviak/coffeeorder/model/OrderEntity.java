@@ -3,6 +3,7 @@ package ru.kviak.coffeeorder.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "events")
 @EntityListeners(AuditingEntityListener.class)
-public class OrderEntity extends BaseEntity {
+public class OrderEntity extends BaseEntity{
 
     @Column(name = "order_id", nullable = false)
     private UUID orderId; // Не изменяется
