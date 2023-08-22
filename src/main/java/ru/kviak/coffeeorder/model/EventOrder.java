@@ -1,11 +1,13 @@
 package ru.kviak.coffeeorder.model;
 
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import ru.kviak.coffeeorder.dto.Event;
+import ru.kviak.coffeeorder.dto.OrderEventDto;
+import ru.kviak.coffeeorder.dto.OrderRegisteredEventDto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -34,5 +36,5 @@ public class EventOrder {
 
     @Column(name = "data")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Event event;
+    private OrderEventDto orderEventDto;
 }

@@ -1,20 +1,28 @@
 package ru.kviak.coffeeorder.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
-public class OrderRegisteredEventDto extends OrderEventDto {
+@NoArgsConstructor
+@JsonTypeName(value = "regist")
+public class OrderRegisteredEventDto extends OrderEventDto{
 
     private long employeeId;
     private long clientId;
-    private LocalDateTime localDateTime;
     private long productId;
     private long price;
 
+
+//    @Override
+//    public Long getOrderId() {
+//        return null;
+//    }
+
     @Override
-    public Long getOrderId() {
-        return null;
+    public long getEmployeeId(){
+        return employeeId;
     }
 }

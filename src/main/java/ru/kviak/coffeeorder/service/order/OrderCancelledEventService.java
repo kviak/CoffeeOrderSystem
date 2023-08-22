@@ -1,8 +1,9 @@
 package ru.kviak.coffeeorder.service.order;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
-import ru.kviak.coffeeorder.dto.OrderRegisteredEventDto;
+import ru.kviak.coffeeorder.dto.OrderCancelledEventDto;
 import ru.kviak.coffeeorder.model.EventOrder;
 import ru.kviak.coffeeorder.model.OrderStatus;
 import ru.kviak.coffeeorder.repository.EventRepository;
@@ -12,19 +13,20 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class OrderRegisteredEventService implements OrderService<OrderRegisteredEventDto>{
+public class OrderCancelledEventService {
 
     private final EventRepository eventRepository;
-    @Override
-    public EventOrder publishEvent(OrderRegisteredEventDto event) {
+
+    public EventOrder publishEvent(OrderCancelledEventDto event) {
 
         EventOrder eventOrder = new EventOrder();
-        eventOrder.setOrderId(UUID.randomUUID());
+        eventOrder.setOrderId(event.getOrderId());
         eventOrder.setStreamId(UUID.randomUUID());
-        eventOrder.setStatus(OrderStatus.REGISTERED);
+        eventOrder.setStatus(OrderStatus.CANCELLED);
         eventOrder.setTime(LocalDateTime.now());
         eventOrder.setOrderEventDto(event);
-        eventOrder.setVersion(eventOrder.getVersion()+1);
+        eventOrder.setVersion(eventRepository.getByOrderId(event.getOrderId()).getVersion()+1);
+
 
         System.out.println(eventOrder);
         eventRepository.save(eventOrder);
