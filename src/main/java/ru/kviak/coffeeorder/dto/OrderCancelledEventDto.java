@@ -1,22 +1,23 @@
 package ru.kviak.coffeeorder.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
-@JsonTypeName(value ="cancel")
 public class OrderCancelledEventDto extends OrderEventDto{
 
+    private final String eventName="OrderCancelledEvent";
     private UUID orderId;
-    private long employeeId;
+    private UUID employeeId;
     private String reason;
 
     @Override
-    public long getEmployeeId() {
+    public UUID getEmployeeId() {
         return employeeId;
     }
 }
