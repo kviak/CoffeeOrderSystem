@@ -9,6 +9,8 @@ import ru.kviak.coffeeorder.model.OrderStatus;
 import ru.kviak.coffeeorder.repository.EventRepository;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -24,7 +26,7 @@ public class OrderRegisteredEventService implements OrderService<OrderRegistered
     }
 
     @Override
-    public OrderEntity publishEvent(OrderEventDto OrderEvent) {
+    public OrderEntity publishEvent(OrderEventDto OrderEvent) { //TODO: Rework, less hardcode
         OrderRegisteredEventDto event = (OrderRegisteredEventDto) OrderEvent;
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(UUID.randomUUID());
@@ -39,4 +41,8 @@ public class OrderRegisteredEventService implements OrderService<OrderRegistered
         return orderEntity;
     }
 
+    @Override
+    public Optional<List<OrderEntity>> findOrder(UUID id) {
+        return null; // TODO: Rework. SOLID, I - interface segregation.
+    }
 }
