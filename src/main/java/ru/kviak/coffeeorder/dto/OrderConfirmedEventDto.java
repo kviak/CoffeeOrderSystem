@@ -19,8 +19,4 @@ public class OrderConfirmedEventDto extends OrderEventDto {
     private List<UUID> productIds;
     private BigDecimal price;
 
-    @Override
-    public UUID getEmployeeId() {
-        return employeeId;
-    }
 }

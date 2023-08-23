@@ -13,7 +13,7 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
-public class OrderConfirmEventService implements OrderService<OrderConfirmedEventDto> {
+public class OrderConfirmedEventService implements OrderService<OrderConfirmedEventDto> {
     private final EventRepository eventRepository;
 
     @Override

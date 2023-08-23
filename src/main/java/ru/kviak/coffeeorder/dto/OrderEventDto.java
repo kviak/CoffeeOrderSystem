@@ -9,7 +9,9 @@ import java.util.UUID;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = OrderRegisteredEventDto.class, name = "OrderRegisteredEvent"),
         @JsonSubTypes.Type(value = OrderCancelledEventDto.class, name = "OrderCancelledEvent"),
-        @JsonSubTypes.Type(value = OrderConfirmedEventDto.class, name = "OrderConfirmedEvent")
+        @JsonSubTypes.Type(value = OrderConfirmedEventDto.class, name = "OrderConfirmedEvent"),
+        @JsonSubTypes.Type(value = OrderReadiedEventDto.class, name = "OrderReadiedEvent"),
+        @JsonSubTypes.Type(value = OrderIssuedByEventDto.class, name = "OrderIssuedByEvent")
 })
 public abstract class OrderEventDto implements Event {
     public abstract UUID getOrderId();
