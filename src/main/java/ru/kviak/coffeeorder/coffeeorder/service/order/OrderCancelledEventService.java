@@ -1,22 +1,19 @@
-package ru.kviak.coffeeorder.service.order;
+package ru.kviak.coffeeorder.coffeeorder.service.order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kviak.coffeeorder.dto.OrderCancelledEventDto;
-import ru.kviak.coffeeorder.dto.OrderEventDto;
-import ru.kviak.coffeeorder.model.OrderEntity;
-import ru.kviak.coffeeorder.model.OrderStatus;
-import ru.kviak.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderCancelledEventDto;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class OrderCancelledEventService implements OrderService<OrderCancelledEventDto> {
+public class OrderCancelledEventService extends AbstractOrderService<OrderCancelledEventDto> {
 
     private final EventRepository eventRepository;
 
@@ -29,7 +26,7 @@ public class OrderCancelledEventService implements OrderService<OrderCancelledEv
     @Transactional
     public OrderEntity publishEvent(OrderEventDto event) { //TODO: Rework, less hardcode
         OrderCancelledEventDto orderCancelledEventDto = (OrderCancelledEventDto) event;
-        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId());
+        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId()).orElseThrow();
         if(order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.ISSUED) return new OrderEntity();
          else {OrderEntity orderEntity = new OrderEntity();
 
@@ -46,10 +43,5 @@ public class OrderCancelledEventService implements OrderService<OrderCancelledEv
             eventRepository.save(orderEntity);
             return orderEntity;
          }
-    }
-
-    @Override
-    public Optional<List<OrderEntity>> findOrder(UUID id) {
-        return null; // TODO: Rework. SOLID, I - interface segregation.
     }
 }

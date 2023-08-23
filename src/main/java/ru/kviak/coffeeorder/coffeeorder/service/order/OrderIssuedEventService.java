@@ -1,21 +1,18 @@
-package ru.kviak.coffeeorder.service.order;
+package ru.kviak.coffeeorder.coffeeorder.service.order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.kviak.coffeeorder.dto.OrderEventDto;
-import ru.kviak.coffeeorder.dto.OrderIssuedByEventDto;
-import ru.kviak.coffeeorder.model.OrderEntity;
-import ru.kviak.coffeeorder.model.OrderStatus;
-import ru.kviak.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderIssuedByEventDto;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class OrderIssuedByEventService implements OrderService<OrderIssuedByEventDto>{
+public class OrderIssuedEventService extends AbstractOrderService<OrderIssuedByEventDto> {
     private final EventRepository eventRepository;
 
     @Override
@@ -28,7 +25,7 @@ public class OrderIssuedByEventService implements OrderService<OrderIssuedByEven
 
         OrderIssuedByEventDto eventDto = (OrderIssuedByEventDto) event;
         OrderEntity orderEntity = new OrderEntity();
-        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId());
+        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId()).orElseThrow();
 
         if (order.getStatus() == OrderStatus.READY) {
             orderEntity.setOrderId(eventDto.getOrderId());
@@ -44,10 +41,5 @@ public class OrderIssuedByEventService implements OrderService<OrderIssuedByEven
             return orderEntity;
         }
         return new OrderEntity();
-    }
-
-    @Override
-    public Optional<List<OrderEntity>> findOrder(UUID id) {
-        return null; // TODO: Rework. SOLID, I - interface segregation.
     }
 }

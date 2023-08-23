@@ -1,7 +1,7 @@
-package ru.kviak.coffeeorder.service.order;
+package ru.kviak.coffeeorder.coffeeorder.service.order;
 
 import org.springframework.stereotype.Service;
-import ru.kviak.coffeeorder.dto.OrderEventDto;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
 
 import java.util.List;
 import java.util.Map;

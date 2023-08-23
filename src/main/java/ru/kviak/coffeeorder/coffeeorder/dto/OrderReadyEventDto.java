@@ -1,4 +1,4 @@
-package ru.kviak.coffeeorder.dto;
+package ru.kviak.coffeeorder.coffeeorder.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderIssuedByEventDto extends OrderEventDto{
+public class OrderReadyEventDto extends OrderEventDto {
 
-    private final String eventName = "OrderReadiedEvent";
+    private final String eventName="OrderReadiedEvent";
     private UUID orderId;
     private UUID employeeId;
 

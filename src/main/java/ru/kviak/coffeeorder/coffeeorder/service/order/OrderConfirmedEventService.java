@@ -1,23 +1,22 @@
-package ru.kviak.coffeeorder.service.order;
+package ru.kviak.coffeeorder.coffeeorder.service.order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kviak.coffeeorder.dto.OrderConfirmedEventDto;
-import ru.kviak.coffeeorder.dto.OrderEventDto;
-import ru.kviak.coffeeorder.model.OrderEntity;
-import ru.kviak.coffeeorder.model.OrderStatus;
-import ru.kviak.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderCancelledEventDto;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
+import ru.kviak.coffeeorder.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderConfirmedEventDto;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
 @Service
 @RequiredArgsConstructor
-public class OrderConfirmedEventService implements OrderService<OrderConfirmedEventDto> {
+public class OrderConfirmedEventService extends AbstractOrderService<OrderConfirmedEventDto> {
     private final EventRepository eventRepository;
 
     @Override
@@ -31,12 +30,12 @@ public class OrderConfirmedEventService implements OrderService<OrderConfirmedEv
 
         OrderConfirmedEventDto eventDto = (OrderConfirmedEventDto) event;
         OrderEntity orderEntity = new OrderEntity();
-        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId());
+        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId()).orElseThrow();
 
         if (order.getStatus() == OrderStatus.REGISTERED) {
             orderEntity.setOrderId(eventDto.getOrderId());
             orderEntity.setEmployeeId(eventDto.getEmployeeId());
-            orderEntity.setStatus(OrderStatus.CONFIRM);
+            orderEntity.setStatus(OrderStatus.CONFIRMED);
             orderEntity.setClientId(order.getClientId());
             orderEntity.setExpectedIssueTime(Instant.now());
             orderEntity.setPrice(order.getPrice());
@@ -46,10 +45,5 @@ public class OrderConfirmedEventService implements OrderService<OrderConfirmedEv
             return orderEntity;
         }
         return new OrderEntity();
-    }
-
-    @Override
-    public Optional<List<OrderEntity>> findOrder(UUID id) {
-        return null;  // TODO: Rework. SOLID, I - interface segregation.
     }
 }

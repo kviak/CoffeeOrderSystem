@@ -1,9 +1,9 @@
-package ru.kviak.coffeeorder.model;
+package ru.kviak.coffeeorder.coffeeorder.model;
 
 public enum OrderStatus {
     REGISTERED,
     CANCELLED,
-    CONFIRM,
+    CONFIRMED,
     READY,
     ISSUED
 }

@@ -1,22 +1,22 @@
-package ru.kviak.coffeeorder.service.order;
+package ru.kviak.coffeeorder.coffeeorder.service.order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.kviak.coffeeorder.dto.OrderEventDto;
-import ru.kviak.coffeeorder.dto.OrderRegisteredEventDto;
-import ru.kviak.coffeeorder.model.OrderEntity;
-import ru.kviak.coffeeorder.model.OrderStatus;
-import ru.kviak.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
+import ru.kviak.coffeeorder.coffeeorder.repository.EventRepository;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
+import ru.kviak.coffeeorder.coffeeorder.dto.OrderRegisteredEventDto;
+import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
+import ru.kviak.coffeeorder.coffeeorder.util.OrderNotFoundException;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 
 @Service
 @RequiredArgsConstructor
-public class OrderRegisteredEventService implements OrderService<OrderRegisteredEventDto>{
+public class OrderRegisteredEventService extends AbstractOrderService<OrderRegisteredEventDto> implements FindOrderService {
 
     private final EventRepository eventRepository;
 
@@ -42,7 +42,8 @@ public class OrderRegisteredEventService implements OrderService<OrderRegistered
     }
 
     @Override
-    public Optional<List<OrderEntity>> findOrder(UUID id) {
-        return null; // TODO: Rework. SOLID, I - interface segregation.
+    public OrderEntity findOrder(UUID id) {
+        Optional<OrderEntity> order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(id);
+        return order.orElseThrow(OrderNotFoundException::new);
     }
 }

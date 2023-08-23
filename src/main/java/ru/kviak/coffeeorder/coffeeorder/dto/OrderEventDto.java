@@ -1,4 +1,4 @@
-package ru.kviak.coffeeorder.dto;
+package ru.kviak.coffeeorder.coffeeorder.dto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -10,9 +10,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = OrderRegisteredEventDto.class, name = "OrderRegisteredEvent"),
         @JsonSubTypes.Type(value = OrderCancelledEventDto.class, name = "OrderCancelledEvent"),
         @JsonSubTypes.Type(value = OrderConfirmedEventDto.class, name = "OrderConfirmedEvent"),
-        @JsonSubTypes.Type(value = OrderReadiedEventDto.class, name = "OrderReadiedEvent"),
-        @JsonSubTypes.Type(value = OrderIssuedByEventDto.class, name = "OrderIssuedByEvent"),
-        @JsonSubTypes.Type(value = OrderGetDto.class, name = "OrderGet")
+        @JsonSubTypes.Type(value = OrderReadyEventDto.class, name = "OrderReadyEvent"),
+        @JsonSubTypes.Type(value = OrderIssuedByEventDto.class, name = "OrderIssuedEvent")
 })
 public abstract class OrderEventDto implements Event {
     public abstract UUID getOrderId();

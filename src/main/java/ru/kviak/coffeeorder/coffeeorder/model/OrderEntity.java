@@ -1,4 +1,4 @@
-package ru.kviak.coffeeorder.model;
+package ru.kviak.coffeeorder.coffeeorder.model;
 
 
 import jakarta.persistence.*;
