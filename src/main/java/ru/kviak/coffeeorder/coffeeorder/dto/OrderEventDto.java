@@ -11,7 +11,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = OrderCancelledEventDto.class, name = "OrderCancelledEvent"),
         @JsonSubTypes.Type(value = OrderConfirmedEventDto.class, name = "OrderConfirmedEvent"),
         @JsonSubTypes.Type(value = OrderReadyEventDto.class, name = "OrderReadyEvent"),
-        @JsonSubTypes.Type(value = OrderIssuedByEventDto.class, name = "OrderIssuedEvent")
+        @JsonSubTypes.Type(value = OrderIssuedEventDto.class, name = "OrderIssuedEvent")
 })
 public abstract class OrderEventDto implements Event {
     public abstract UUID getOrderId();

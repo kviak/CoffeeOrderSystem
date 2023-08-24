@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderIssuedByEventDto extends OrderEventDto{
+public class OrderIssuedEventDto extends OrderEventDto{
 
     private final String eventName = "OrderReadiedEvent";
     private UUID orderId;

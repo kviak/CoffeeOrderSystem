@@ -1,13 +1,15 @@
-package ru.kviak.coffeeorder.coffeeorder.util;
+package ru.kviak.coffeeorder.coffeeorder.util.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.Instant;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class OrderErrorResponse {
     private String message;
-    private long timestamp;
+    private Instant instant;
 }

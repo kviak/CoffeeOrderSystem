@@ -2,14 +2,14 @@ package ru.kviak.coffeeorder.coffeeorder.service.order;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
 import ru.kviak.coffeeorder.coffeeorder.repository.EventRepository;
 import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
 import ru.kviak.coffeeorder.coffeeorder.dto.OrderRegisteredEventDto;
-import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
-import ru.kviak.coffeeorder.coffeeorder.util.OrderNotFoundException;
+import ru.kviak.coffeeorder.coffeeorder.util.error.OrderNotFoundException;
+import ru.kviak.coffeeorder.coffeeorder.util.mapper.OrderEntityMapper;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,22 +25,15 @@ public class OrderRegisteredEventService extends AbstractOrderService<OrderRegis
         return OrderRegisteredEventDto.class;
     }
 
+    @Transactional
     @Override
-    public OrderEntity publishEvent(OrderEventDto OrderEvent) { //TODO: Rework, less hardcode
-        OrderRegisteredEventDto event = (OrderRegisteredEventDto) OrderEvent;
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setOrderId(UUID.randomUUID());
-        orderEntity.setExpectedIssueTime(Instant.now());
-        orderEntity.setStatus(OrderStatus.REGISTERED);
-        orderEntity.setClientId(event.getClientId());
-        orderEntity.setProductIds(event.getProductIds());
-        orderEntity.setEmployeeId(event.getEmployeeId());
-        orderEntity.setPrice(event.getPrice());
-
+    public OrderEntity publishEvent(OrderEventDto OrderEvent) {
+        OrderEntity orderEntity = OrderEntityMapper.INSTANCE.convertCustom((OrderRegisteredEventDto) OrderEvent);
         eventRepository.save(orderEntity);
         return orderEntity;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public OrderEntity findOrder(UUID id) {
         Optional<OrderEntity> order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(id);

@@ -8,8 +8,9 @@ import ru.kviak.coffeeorder.coffeeorder.dto.OrderEventDto;
 import ru.kviak.coffeeorder.coffeeorder.dto.OrderReadyEventDto;
 import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
 import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
-
-import java.time.Instant;
+import ru.kviak.coffeeorder.coffeeorder.util.error.OrderInvalidStatusException;
+import ru.kviak.coffeeorder.coffeeorder.util.error.OrderNotFoundException;
+import ru.kviak.coffeeorder.coffeeorder.util.mapper.OrderEntityMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -23,23 +24,13 @@ public class OrderReadyEventService extends AbstractOrderService<OrderReadyEvent
 
     @Transactional
     @Override
-    public OrderEntity publishEvent(OrderEventDto event) { //TODO: Rework, less hardcode
-
-        OrderReadyEventDto eventDto = (OrderReadyEventDto) event;
-        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(eventDto.getOrderId()).orElseThrow();
-        System.out.println(order.getId());
-        System.out.println(order.getStatus());
+    public OrderEntity publishEvent(OrderEventDto event) {
+        OrderEntity order = eventRepository.findTopByOrderIdOrderByDateTimeDesc(event.getOrderId()).orElseThrow(OrderNotFoundException::new);
         if (order.getStatus() == OrderStatus.CONFIRMED) {
-            OrderEntity orderEntity = new OrderEntity();
-            orderEntity.setOrderId(eventDto.getOrderId());
-            orderEntity.setEmployeeId(eventDto.getEmployeeId());
-            orderEntity.setStatus(OrderStatus.READY);
-            orderEntity.setClientId(order.getClientId());
-            orderEntity.setExpectedIssueTime(Instant.now());
-            orderEntity.setPrice(order.getPrice());
-            orderEntity.setProductIds(order.getProductIds());
+            OrderEntity orderEntity = OrderEntityMapper.INSTANCE.convertCustom((OrderReadyEventDto) event, order);
             eventRepository.save(orderEntity);
             return orderEntity;
-        } return new OrderEntity();
+        }
+        throw new OrderInvalidStatusException();
     }
 }
