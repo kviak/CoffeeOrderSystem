@@ -35,7 +35,7 @@ public class OrderController {
     public ResponseEntity<OrderEntity> get(@PathVariable String id){
         try{
         return ResponseEntity.ok(orderRegisteredEventService
-                .findOrder(UUID.fromString(id.substring(3))));} catch (Exception e) {
+                .findOrder(UUID.fromString(id)));} catch (Exception e) {
             throw new OrderNotFoundException();
         }
     }
