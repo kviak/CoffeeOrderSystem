@@ -41,6 +41,7 @@ public class OrderRegisteredEventServiceTest {
     void testPublishEvent() {
         OrderRegisteredEventDto orderEventDto = new OrderRegisteredEventDto(UUID.randomUUID(), UUID.randomUUID(), List.of(UUID.randomUUID()), BigDecimal.TEN); // Add new Event.
         OrderEntity expectedOrderEntity;
+
         expectedOrderEntity = OrderEntityMapper.INSTANCE.
                 convertCustom(orderEventDto);
         when(eventRepository.save(any(OrderEntity.class)))
@@ -49,6 +50,7 @@ public class OrderRegisteredEventServiceTest {
                 .publishEvent(orderEventDto);
         verify(eventRepository, times(1))
                 .save(any(OrderEntity.class));
+
         assertEquals(expectedOrderEntity.getStatus(), result.getStatus());
     }
 
@@ -56,12 +58,14 @@ public class OrderRegisteredEventServiceTest {
     void testFindOrder() {
         UUID orderId = UUID.randomUUID();
         OrderEntity expectedOrderEntity = new OrderEntity();
+
         when(eventRepository.findTopByOrderIdOrderByDateTimeDesc(orderId))
                 .thenReturn(Optional.of(expectedOrderEntity));
         OrderEntity result = orderRegisteredEventService.findOrder(orderId);
 
         verify(eventRepository, times(1))
                 .findTopByOrderIdOrderByDateTimeDesc(orderId);
+
         assertEquals(expectedOrderEntity, result);
     }
 
@@ -75,9 +79,11 @@ public class OrderRegisteredEventServiceTest {
 
     @Test
     void testExpectedExceptionPublish(){
-        OrderRegisteredEventDto orderEventDto = new OrderRegisteredEventDto(); // If put empty object should throw OrderInvalidStatusException
+        OrderRegisteredEventDto orderEventDto = new OrderRegisteredEventDto();
+        // If put empty object should throw OrderInvalidStatusException
         OrderInvalidStatusException thrown = Assertions.assertThrows(OrderInvalidStatusException.class, () ->
             orderRegisteredEventService.publishEvent(orderEventDto));
+
         Assertions.assertEquals(OrderInvalidStatusException.class ,thrown.getClass());
     }
 }

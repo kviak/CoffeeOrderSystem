@@ -40,16 +40,16 @@ public class OrderController {
         }
     }
 
-    @ExceptionHandler
-    private ResponseEntity<OrderErrorResponse> handleException(OrderNotFoundException e){
+    @ExceptionHandler(OrderNotFoundException.class)
+    private ResponseEntity<OrderErrorResponse> handleOrderNotFoundException(){
         OrderErrorResponse response = new OrderErrorResponse(
                 "Order with this id wasn't found!",
                 Instant.now()
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler
-    private ResponseEntity<OrderErrorResponse> handleException(OrderInvalidStatusException e){
+    @ExceptionHandler(OrderInvalidStatusException.class)
+    private ResponseEntity<OrderErrorResponse> handleOrderInvalidStatusException(){
         OrderErrorResponse response = new OrderErrorResponse(
                 "Invalid event for this order!",
                 Instant.now()
