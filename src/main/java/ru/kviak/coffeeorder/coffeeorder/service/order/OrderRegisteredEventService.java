@@ -29,7 +29,6 @@ public class OrderRegisteredEventService extends AbstractOrderService<OrderRegis
     @Override
     public OrderEntity publishEvent(OrderEventDto OrderEvent) {
         OrderEntity orderEntity = OrderEntityMapper.INSTANCE.convertCustom((OrderRegisteredEventDto) OrderEvent);
-        System.out.println(orderEntity);
         eventRepository.save(orderEntity);
         return orderEntity;
     }
