@@ -5,6 +5,7 @@ import org.mapstruct.factory.Mappers;
 import ru.kviak.coffeeorder.coffeeorder.dto.*;
 import ru.kviak.coffeeorder.coffeeorder.model.OrderEntity;
 import ru.kviak.coffeeorder.coffeeorder.model.OrderStatus;
+import ru.kviak.coffeeorder.coffeeorder.util.error.OrderInvalidStatusException;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public interface OrderEntityMapper {
     OrderEntityMapper INSTANCE = Mappers.getMapper(OrderEntityMapper.class);
 
     default OrderEntity convertCustom(OrderRegisteredEventDto eventDto){
+        if (eventDto.getEmployeeId() == null) throw new OrderInvalidStatusException();
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(UUID.randomUUID());
         orderEntity.setExpectedIssueTime(Instant.now());
@@ -26,6 +28,7 @@ public interface OrderEntityMapper {
     }
 
     default OrderEntity convertCustom(OrderCancelledEventDto eventDto, OrderEntity order){
+        if (eventDto.getEmployeeId() == null) throw new OrderInvalidStatusException();
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(eventDto.getOrderId());
         orderEntity.setEmployeeId(eventDto.getEmployeeId());
@@ -40,6 +43,7 @@ public interface OrderEntityMapper {
     }
 
     default OrderEntity convertCustom(OrderConfirmedEventDto eventDto, OrderEntity order){
+        if (eventDto.getEmployeeId() == null) throw new OrderInvalidStatusException();
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(eventDto.getOrderId());
         orderEntity.setEmployeeId(eventDto.getEmployeeId());
@@ -52,6 +56,7 @@ public interface OrderEntityMapper {
     }
 
     default OrderEntity convertCustom(OrderReadyEventDto eventDto, OrderEntity order){
+        if (eventDto.getEmployeeId() == null) throw new OrderInvalidStatusException();
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(eventDto.getOrderId());
         orderEntity.setEmployeeId(eventDto.getEmployeeId());
@@ -64,6 +69,7 @@ public interface OrderEntityMapper {
     }
 
     default OrderEntity convertCustom(OrderIssuedEventDto eventDto, OrderEntity order){
+        if (eventDto.getEmployeeId() == null) throw new OrderInvalidStatusException();
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(eventDto.getOrderId());
         orderEntity.setEmployeeId(eventDto.getEmployeeId());
@@ -75,5 +81,4 @@ public interface OrderEntityMapper {
         orderEntity.setProductIds(order.getProductIds());
         return orderEntity;
     }
-
 }
