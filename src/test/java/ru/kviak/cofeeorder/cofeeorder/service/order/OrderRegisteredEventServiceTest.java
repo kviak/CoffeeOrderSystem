@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -51,7 +52,11 @@ public class OrderRegisteredEventServiceTest {
         verify(eventRepository, times(1))
                 .save(any(OrderEntity.class));
 
-        assertEquals(expectedOrderEntity.getStatus(), result.getStatus());
+        assertThat(result)
+                .usingRecursiveComparison()
+                .ignoringFields("expectedIssueTime")
+                .ignoringFields("orderId")
+                .isEqualTo(expectedOrderEntity);
     }
 
     @Test
